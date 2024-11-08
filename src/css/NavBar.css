@@ -1,0 +1,120 @@
+.nav {
+  width: 100vw;
+  height: 80px;
+  /* background: #dedede; */
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
+}
+
+.nav .search-bar input {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid rgb(74, 90, 255);
+}
+
+.nav-search-menu-bg {
+  position: absolute;
+  background: rgba(95, 146, 255, 0);
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+}
+
+.nav-search-menu {
+  padding: 10px 20px;
+  width: fit-content;
+}
+
+.nav-search-menu-bg .search-bar input {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid rgb(74, 90, 255);
+}
+
+.results-list {
+  background-color: #ffffff;
+  width: 200px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgb(74, 90, 255);
+}
+
+.search-result {
+  padding: 4px 0;
+}
+
+.search-result:hover {
+  text-decoration: underline;
+}
+
+.nav .profileImage img {
+  height: 60px;
+  width: 60px;
+  object-fit: cover;
+  border-radius: 1000px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-pop-up-menu-bg {
+  position: absolute;
+  background: rgba(95, 146, 255, 0);
+  height: 100vh;
+  width: 100vw;
+}
+
+.nav-pop-up-menu {
+  position: relative;
+  background: rgb(230, 232, 255);
+  /* height: 400px; */
+  padding: 40px;
+  width: 300px;
+  left: calc(100vw - 300px - 10px);
+  top: 80px;
+  border-radius: 50px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.nav-pop-up-menu img {
+  height: 160px;
+  width: 160px;
+  object-fit: cover;
+  border-radius: 1000px;
+}
+
+.nav-pop-up-menu .view-profile {
+  padding: 10px 20px;
+  border-radius: 20px;
+  background: #ffffff;
+  cursor: pointer;
+  margin: 20px;
+}
+
+.nav-pop-up-menu .view-profile:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-pop-up-menu .logout {
+  padding: 10px 20px;
+  border-radius: 20px;
+  background: rgb(74, 90, 255);
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.nav-pop-up-menu .logout:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.middle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}

@@ -1,0 +1,87 @@
+.profileMain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80vw;
+  margin-bottom: 20px;
+}
+
+.details {
+  padding: 50px;
+}
+
+.details h1.name {
+  font-size: 64px;
+  color: rgb(104, 114, 255);
+}
+
+.followers {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0px 10px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  /* padding: 30px 0px; */
+  gap: 10px;
+}
+
+.buttons * {
+  color: #000000;
+  padding: 10px 30px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.buttons .fill {
+  background-color: rgb(57, 70, 255);
+  color: #fff;
+}
+
+.buttons .outlined {
+  border: 1px solid rgb(57, 70, 255);
+}
+
+.photo img {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+}
+
+.profile-posts {
+  width: 100%;
+  max-width: 600px;
+}
+
+.profile-posts .post {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.profile-posts .post h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.profile-posts .post p {
+  margin: 5px 0;
+}
+
+.profile-posts .post .likes-comments {
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+  color: #555;
+}
