@@ -1,4 +1,3 @@
-import logo from "./logo.svg"
 import "./App.css"
 import Login from "./pages/Login"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
@@ -7,6 +6,9 @@ import Home from "./pages/Home"
 import { useState, useEffect } from "react"
 import Profile from "./pages/Profile"
 import Signup from "./pages/Signup"
+import NewPost from "./components/NewPost"
+import Chats from "./pages/Chats"
+import io from "socket.io-client"
 
 const router = createBrowserRouter([
   {
@@ -16,6 +18,18 @@ const router = createBrowserRouter([
       {
         path: ":param",
         element: <Profile />,
+      },
+      {
+        path: "/chats",
+        element: <Chats />,
+      },
+      {
+        path: "/chats/:chatId",
+        element: <Chats />,
+      },
+      {
+        path: "/newpost",
+        element: <NewPost />,
       },
     ],
   },
@@ -31,15 +45,48 @@ const router = createBrowserRouter([
 
 function App() {
   const [user, setUser] = useState(null)
+  const [socket, setSocket] = useState(null)
+  const [initializing, setInitializing] = useState(true)
+
+  let disconnectSocketio
+
+  const handleNewMessage = async (message) => {}
+  const initSocketio = async (username) => {
+    const socketio = io("http://localhost:8000", {
+      query: { username },
+      transports: ["websocket"],
+    })
+    setSocket(socketio)
+
+    // socketio.on("newMessage", (message) => {
+    //   // handleNewMessage(message)
+    //   console.log(message, "ssssssss")
+    // })
+
+    disconnectSocketio = () => {
+      socketio.close()
+      setSocket(null)
+    }
+  }
 
   useEffect(() => {
-    const user = localStorage.getItem("user")
-    setUser(user)
+    const username = localStorage.getItem("user")
+    if (!username) {
+      setInitializing(false)
+      return
+    }
+    setUser(username)
+    setInitializing(false)
+    initSocketio(username)
+
+    return () => {
+      disconnectSocketio()
+    }
   }, [])
 
   return (
     <>
-      <appContext.Provider value={{ user, setUser }}>
+      <appContext.Provider value={{ user, setUser, socket, initializing }}>
         <RouterProvider router={router} />
       </appContext.Provider>
     </>

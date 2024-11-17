@@ -1,22 +1,42 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useNavigate, Outlet, useLocation } from "react-router-dom"
 import { appContext } from "../context/appContext"
 import "../css/Home.css"
 import Navbar from "../components/NavBar"
+import PostsList from "../components/PostsList"
+import LoadingScreen from "../components/LoadingScreen"
+import { getPostOfFollowedUsers } from "../utils/apis"
 
 const Home = () => {
-  const { user } = useContext(appContext)
+  const { user, initializing } = useContext(appContext)
   const navigate = useNavigate()
   const location = useLocation()
 
+  const [posts, setPosts] = useState([])
+
+  const getPosts = async () => {
+    const res = await getPostOfFollowedUsers()
+    console.log(res)
+
+    if (res.success) {
+      setPosts(res.posts)
+    }
+  }
+
   useEffect(() => {
-    if (!user) {
+    if (!user && !initializing) {
       navigate("/login")
     }
-  }, [user, navigate])
+  }, [user, navigate, initializing])
 
-  if (!user) {
-    return null // or a loading spinner, or any other fallback UI
+  useEffect(() => {
+    if (user) {
+      getPosts()
+    }
+  }, [user])
+
+  if (initializing) {
+    return <LoadingScreen />
   }
 
   const isRootPath = location.pathname === "/"
@@ -24,14 +44,15 @@ const Home = () => {
   return (
     <div className="home">
       <Navbar />
-      {isRootPath ? (
-        <>
-          <h1>Home {user}</h1>
-          {/* Other home content */}
-        </>
-      ) : (
-        <Outlet /> // This is where the nested routes will be rendered
-      )}
+      <main>
+        {isRootPath ? (
+          <div className="home-main">
+            <PostsList posts={posts} />
+          </div>
+        ) : (
+          <Outlet /> // This is where the nested routes will be rendered
+        )}
+      </main>
     </div>
   )
 }

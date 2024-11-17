@@ -1,63 +1,173 @@
 import React, { useContext, useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import "../css/Profile.css"
-import { getProfile, toggleFollow } from "../utils/apis"
+import { createChat, getChats, getProfile, getUserPosts, toggleFollow } from "../utils/apis"
 import { appContext } from "../context/appContext"
+import PostsList from "../components/PostsList"
+import LoadingScreen from "../components/LoadingScreen"
+import UserList from "../components/UserList"
+import EditProfile from "../components/EditProfile"
 
-let defaultPhoto =
-  "https://static.vecteezy.com/system/resources/previews/011/490/381/original/happy-smiling-young-man-avatar-3d-portrait-of-a-man-cartoon-character-people-illustration-isolated-on-white-background-vector.jpg"
+let defaultPhoto = "profile.jpg"
 
 const Profile = () => {
-  const { param } = useParams()
+  const { param: username } = useParams()
   const { user } = useContext(appContext)
+  const navigate = useNavigate()
 
   const [data, setData] = useState(null)
   const [isFollowed, setIsFollowed] = useState(false)
+  const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [showFollowers, setShowFollowers] = useState(false)
+  const [showFollowing, setShowFollowing] = useState(false)
+  const [showEditProfile, setShowEditProfile] = useState(false)
 
   const getProfileData = async () => {
-    const res = await getProfile(param)
-    setData(res)
+    try {
+      const res = await getProfile(username)
+      if (res.success) {
+        setData(res)
+        console.log(res)
+        setIsFollowed(res.followers.includes(user))
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
 
-    setIsFollowed(res.followers.includes(user))
+  const getPosts = async () => {
+    const res = await getUserPosts(username)
+    if (res.success) {
+      setPosts(res.posts)
+    }
   }
 
   const handleFollow = async () => {
-    const res = await toggleFollow(param)
+    const res = await toggleFollow(username)
     if (res.success) {
       getProfileData()
     }
   }
 
+  const handleMessage = async () => {
+    const res = await getChats()
+    if (res.success) {
+      const chat = res.chats.find((chat) => chat.user1 === username || chat.user2 === username)
+      if (chat) {
+        navigate(`/chats/${chat.id}`)
+      } else {
+        const res = await createChat(username)
+        if (res.success) {
+          navigate(`/chats/${res.chat.id}`)
+        } else {
+          console.log(res)
+          alert("Failed to create chat")
+        }
+      }
+    } else {
+      alert("Failed to get chats", res.message)
+    }
+  }
+
   useEffect(() => {
+    setLoading(true) // Reset loading state
+    setPosts([]) // Reset posts
+    setData(null) // Reset profile data
     getProfileData()
-  }, [param])
+    getPosts()
+  }, [username])
 
   return (
     <div className="profileMain">
-      {data && (
-        <>
-          <div className="profile-info">
-            <div className="details">
-              <h1 className="name">{data.user.Name}</h1>
-              <div className="followers">
-                <span>Followers: {data.followers.length}</span>
-                <span>Following: {data.following.length}</span>
-              </div>
-              {param !== user && (
-                <div className="buttons">
-                  <div className={isFollowed ? "outlined" : "fill"} onClick={handleFollow}>
-                    {isFollowed ? "UnFollow" : "Follow"}
-                  </div>
-                  <div className={isFollowed ? "fill" : "outlined"}>Message</div>
+      {loading ? (
+        <LoadingScreen />
+      ) : (
+        data && (
+          <>
+            <div className="profile-header">
+              <div className="profile-info">
+                <div className="photo">
+                  <img
+                    src={
+                      data.user.profile_image
+                        ? `http://localhost:8000/${data.user.profile_image}`
+                        : defaultPhoto
+                    }
+                    alt="profile"
+                  />
                 </div>
-              )}
+                <div className="details">
+                  <h1 className="name">{data.user.name}</h1>
+                  <div className="stats">
+                    <div className="stat">
+                      <span className="stat-value">{posts.length}</span>
+                      <span className="stat-label">Posts</span>
+                    </div>
+                    <div className="stat" onClick={() => setShowFollowers(true)}>
+                      <span className="stat-value">{data.followers.length}</span>
+                      <span className="stat-label">Followers</span>
+                    </div>
+                    <div className="stat" onClick={() => setShowFollowing(true)}>
+                      <span className="stat-value">{data.following.length}</span>
+                      <span className="stat-label">Following</span>
+                    </div>
+                  </div>
+                  {username !== user && (
+                    <div className="buttons">
+                      <button
+                        className={`btn ${isFollowed ? "outlined" : "filled"}`}
+                        onClick={handleFollow}
+                      >
+                        {isFollowed ? "Unfollow" : "Follow"}
+                      </button>
+                      <button
+                        onClick={handleMessage}
+                        className={`btn ${isFollowed ? "filled" : "outlined"}`}
+                      >
+                        Message
+                      </button>
+                    </div>
+                  )}
+                  {username === user && (
+                    <button onClick={() => setShowEditProfile(true)} className="btn outlined">
+                      Edit Profile
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
-            <div className="photo">
-              <img src={defaultPhoto} alt="profile" />
+            <div className="profile-content">
+              <div className="profile-posts">
+                <PostsList posts={posts.reverse()} />
+              </div>
             </div>
-          </div>
-          <div className="profile-posts"></div>
-        </>
+
+            {showFollowers && (
+              <UserList
+                users={data.followers}
+                title="Followers"
+                onClose={() => setShowFollowers(false)}
+              />
+            )}
+
+            {showFollowing && (
+              <UserList
+                users={data.following}
+                title="Following"
+                onClose={() => setShowFollowing(false)}
+              />
+            )}
+
+            {showEditProfile && (
+              <EditProfile
+                userData={data.user}
+                onClose={() => setShowEditProfile(false)}
+                onUpdate={getProfileData}
+              />
+            )}
+          </>
+        )
       )}
     </div>
   )
