@@ -1,12 +1,20 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import "../css/Profile.css"
-import { createChat, getChats, getProfile, getUserPosts, toggleFollow } from "../utils/apis"
+import {
+  createChat,
+  deleteProfile,
+  getChats,
+  getProfile,
+  getUserPosts,
+  toggleFollow,
+} from "../utils/apis"
 import { appContext } from "../context/appContext"
 import PostsList from "../components/PostsList"
 import LoadingScreen from "../components/LoadingScreen"
 import UserList from "../components/UserList"
 import EditProfile from "../components/EditProfile"
+import { getImageUrl } from "../utils/pp"
 
 let defaultPhoto = "profile.jpg"
 
@@ -70,10 +78,30 @@ const Profile = () => {
     }
   }
 
+  const handleDeleteProfile = async () => {
+    if (
+      window.confirm("Are you sure you want to delete your profile? This action cannot be undone.")
+    ) {
+      try {
+        const res = await deleteProfile()
+        if (res.success) {
+          localStorage.removeItem("user")
+          localStorage.removeItem("token")
+          window.location.reload()
+        } else {
+          alert("Failed to delete profile")
+        }
+      } catch (error) {
+        console.error("Error deleting profile:", error)
+        alert("An error occurred while deleting profile")
+      }
+    }
+  }
+
   useEffect(() => {
-    setLoading(true) // Reset loading state
-    setPosts([]) // Reset posts
-    setData(null) // Reset profile data
+    setLoading(true)
+    setPosts([])
+    setData(null)
     getProfileData()
     getPosts()
   }, [username])
@@ -88,14 +116,7 @@ const Profile = () => {
             <div className="profile-header">
               <div className="profile-info">
                 <div className="photo">
-                  <img
-                    src={
-                      data.user.profile_image
-                        ? `http://localhost:8000/${data.user.profile_image}`
-                        : defaultPhoto
-                    }
-                    alt="profile"
-                  />
+                  <img src={getImageUrl(data.user.profile_image) || defaultPhoto} alt="profile" />
                 </div>
                 <div className="details">
                   <h1 className="name">{data.user.name}</h1>
@@ -130,9 +151,16 @@ const Profile = () => {
                     </div>
                   )}
                   {username === user && (
-                    <button onClick={() => setShowEditProfile(true)} className="btn outlined">
-                      Edit Profile
-                    </button>
+                    <>
+                      <div className="buttons">
+                        <button onClick={() => setShowEditProfile(true)} className="btn outlined">
+                          Edit Profile
+                        </button>
+                        <button className="delete-profile-btn" onClick={handleDeleteProfile}>
+                          Delete Profile
+                        </button>
+                      </div>
+                    </>
                   )}
                 </div>
               </div>

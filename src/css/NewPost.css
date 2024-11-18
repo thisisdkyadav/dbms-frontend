@@ -74,7 +74,10 @@ textarea:focus {
 
 .media-preview {
   position: relative;
-  margin-top: 16px;
+  margin-top: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f5f5f5;
 }
 
 .media-preview img {
@@ -84,18 +87,43 @@ textarea:focus {
   object-fit: contain;
 }
 
+.preview-media {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+}
+
+.remove-media {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.remove-media:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+video.preview-media {
+  background: #000;
+}
+/* 
 .media-preview button {
   position: absolute;
   top: 8px;
   right: 8px;
   padding: 10px 20px;
   background: rgb(237, 240, 242);
-  /* color: rgb(60, 73, 255); */
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
-}
+} */
 
 .post-footer {
   padding: 20px 40px;

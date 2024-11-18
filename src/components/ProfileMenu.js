@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { appContext } from "../context/appContext"
 import { getMiniProfile } from "../utils/apis"
+import { getImageUrl } from "../utils/pp"
 
 const ProfileMenu = () => {
   const { user } = useContext(appContext)
@@ -29,7 +30,7 @@ const ProfileMenu = () => {
       {showMenu && (
         <div className="nav-pop-up-menu-bg" onClick={() => setShowMenu(false)}>
           <div className="nav-pop-up-menu" onClick={(e) => e.stopPropagation()}>
-            <img src={userData?.profile_image || "profile.jpg"} alt={user} />
+            <img src={getImageUrl(userData?.profile_image) || "profile.jpg"} alt={user} />
             <div className="user-info">
               {userData?.name && <div className="user-name">{userData.name}</div>}
               <div className="user-username">@{user}</div>
@@ -45,7 +46,7 @@ const ProfileMenu = () => {
       )}
 
       <div className="profileImage" onClick={() => setShowMenu(!showMenu)}>
-        <img src={userData?.profile_image || "profile.jpg"} alt={user} />
+        <img src={getImageUrl(userData?.profile_image) || "profile.jpg"} alt={user} />
       </div>
     </>
   )

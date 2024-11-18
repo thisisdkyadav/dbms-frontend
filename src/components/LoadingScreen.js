@@ -1,4 +1,3 @@
-// LoadingScreen.js
 import React from "react"
 import "../css/LoadingScreen.css"
 

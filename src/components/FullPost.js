@@ -3,13 +3,12 @@ import { Link } from "react-router-dom"
 import PostBody from "./PostBody"
 import CommentInput from "./CommentInput"
 import { getComments } from "../utils/apis"
+import Comment from "./Comment"
 
-// Helper function to create comment tree
 const createCommentTree = (comments) => {
   const commentMap = {}
   const roots = []
 
-  // First pass: create map of all comments
   comments.forEach((comment) => {
     commentMap[comment.id] = {
       ...comment,
@@ -17,7 +16,6 @@ const createCommentTree = (comments) => {
     }
   })
 
-  // Second pass: create hierarchy
   comments.forEach((comment) => {
     if (comment.parent_comment) {
       const parent = commentMap[comment.parent_comment]
@@ -30,50 +28,6 @@ const createCommentTree = (comments) => {
   })
 
   return roots
-}
-
-// Component to render a single comment and its replies
-const Comment = ({ comment, loadComments, activeCommentReply, setActiveCommentReply }) => {
-  return (
-    <div className="comment">
-      <div className="comment-content">
-        <div className="comment-top">
-          <Link to={`/${comment.author}`} className="comment-top-left">
-            <img src="profile.jpg" alt="profile" />
-            {comment.author}
-          </Link>
-          <div className="comment-top-right">
-            {new Date(comment.time.replace(" ", "T")).toLocaleString()}
-            <div onClick={() => setActiveCommentReply(comment.id)} className="comment-reply">
-              Reply
-            </div>
-          </div>
-        </div>
-        <div className="comment-text">{comment.text}</div>
-      </div>
-      {activeCommentReply === comment.id && (
-        <CommentInput
-          postId={comment.post}
-          parentComment={comment.id}
-          onCommentAdded={loadComments}
-        />
-      )}
-      {/* Render replies */}
-      {comment.children && comment.children.length > 0 && (
-        <div className="comment-replies">
-          {comment.children.map((reply) => (
-            <Comment
-              key={reply.id}
-              loadComments={loadComments}
-              comment={reply}
-              activeCommentReply={activeCommentReply}
-              setActiveCommentReply={setActiveCommentReply}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  )
 }
 
 const FullPost = ({ data, setActivePost }) => {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import "../css/UserList.css"
 import { getMiniProfile } from "../utils/apis"
+import { getImageUrl } from "../utils/pp"
 
 const UserList = ({ users, title, onClose }) => {
   const [usersData, setUsersData] = useState({})
@@ -32,7 +33,10 @@ const UserList = ({ users, title, onClose }) => {
         <div className="users-list">
           {users.map((username, index) => (
             <Link to={`/${username}`} className="user-item" key={index} onClick={onClose}>
-              <img src={usersData[username]?.profile_image || "profile.jpg"} alt={username} />
+              <img
+                src={getImageUrl(usersData[username]?.profile_image) || "profile.jpg"}
+                alt={username}
+              />
               <div className="user-info">
                 <span className="username">{username}</span>
                 {usersData[username]?.name && (

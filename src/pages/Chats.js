@@ -4,6 +4,7 @@ import MessagesView from "../components/MessagesView"
 import { appContext } from "../context/appContext"
 import { Link, useParams } from "react-router-dom"
 import { getMiniProfile, getChats } from "../utils/apis"
+import { getImageUrl } from "../utils/pp"
 
 const Chats = () => {
   const { chatId } = useParams()
@@ -14,7 +15,6 @@ const Chats = () => {
   const [usersData, setUsersData] = useState({})
 
   const getReceiverIds = () => {
-    // add users of chatId to array
     const receiverIds = []
     for (let chat of chats) {
       console.log(chat, chatId)
@@ -45,7 +45,6 @@ const Chats = () => {
       console.log(res)
 
       setChats(res.chats)
-      // Load mini profiles for all users
       const users = new Set(res.chats.flatMap((chat) => [chat.user1, chat.user2]))
       users.forEach((username) => {
         if (username !== user) loadUserData(username)
@@ -72,7 +71,7 @@ const Chats = () => {
             >
               <img
                 className="chat-avatar"
-                src={userData?.profile_image || "profile.jpg"}
+                src={getImageUrl(userData?.profile_image) || "profile.jpg"}
                 alt={otherUser}
               />
               <div className="chat-info">

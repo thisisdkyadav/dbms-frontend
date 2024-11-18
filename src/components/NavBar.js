@@ -7,30 +7,17 @@ import ProfileMenu from "./ProfileMenu"
 import SearchResults from "./SearchResults"
 
 const Navbar = () => {
-  const { user } = useContext(appContext)
-
-  const [showMenu, setShowMenu] = useState(false)
   const [showSearch, setShowSearch] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
   const [results, setResults] = useState([])
 
   const searchInputRef = useRef(null)
 
-  const handleLogout = () => {
-    localStorage.removeItem("user")
-    localStorage.removeItem("token")
-    window.location.reload()
-  }
-
   const handleSearch = async (e) => {
-    setSearchQuery(e.target.value)
     if (e.target.value.length < 1) {
       setResults([])
       return
     }
     const res = await searchUsers(e.target.value)
-    console.log(res)
-
     setResults(res.users)
   }
 
@@ -56,7 +43,7 @@ const Navbar = () => {
           <div
             className="nav-search-menu"
             onClick={(e) => {
-              e.stopPropagation() // Prevent click event from propagating to nav-pop-up-menu-bg
+              e.stopPropagation()
             }}
           >
             <div className="search-bar">

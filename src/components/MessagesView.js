@@ -57,23 +57,12 @@ const MessagesView = ({ chatId, receiverIds }) => {
 
   useEffect(() => {
     initMessages()
-    socket.on("newMessage", (message) => {
-      initMessages()
-    })
-  }, [])
-
-  //   useEffect(() => {
-  //     const messagesList = messagesListRef.current
-  //     const isAtBottom =
-  //       messagesList.scrollHeight - messagesList.scrollTop < messagesList.clientHeight + 100
-  //     console.log(messagesList.scrollHeight, messagesList.scrollTop, messagesList.clientHeight)
-
-  //     console.log(isAtBottom)
-
-  //     if (isAtBottom) {
-  //       scrollToBottom()
-  //     }
-  //   }, [messages])
+    if (chatId && socket) {
+      socket.on("newMessage", (message) => {
+        initMessages()
+      })
+    }
+  }, [chatId, socket])
 
   return (
     <div className="messages-view">

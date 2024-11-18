@@ -37,6 +37,7 @@
   top: 0;
   left: 0;
   backdrop-filter: blur(4px);
+  z-index: 10;
 }
 
 .nav-search-menu {
@@ -159,6 +160,7 @@
   width: 100vw;
   left: 0;
   top: 0;
+  z-index: 2;
 }
 
 .nav-pop-up-menu {

@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react"
 import { uploadMedia, updateProfile } from "../utils/apis"
 import "../css/EditProfile.css"
+import { getImageUrl } from "../utils/pp"
 
 const EditProfile = ({ userData, onClose, onUpdate }) => {
   console.log(userData)
@@ -114,7 +115,10 @@ const EditProfile = ({ userData, onClose, onUpdate }) => {
 
         <form onSubmit={handleSubmit} className="edit-profile-form">
           <div className="photo-upload">
-            <img src={preview || userData?.profile_image || "profile.jpg"} alt="Profile" />
+            <img
+              src={preview || getImageUrl(userData?.profile_image) || "profile.jpg"}
+              alt="Profile"
+            />
             <label className="upload-btn">
               Change Photo
               <input type="file" accept="image/*" onChange={handlePhotoChange} hidden />

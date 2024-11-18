@@ -50,7 +50,7 @@ const Home = () => {
             <PostsList posts={posts} />
           </div>
         ) : (
-          <Outlet /> // This is where the nested routes will be rendered
+          <Outlet />
         )}
       </main>
     </div>

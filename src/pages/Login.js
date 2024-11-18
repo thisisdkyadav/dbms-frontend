@@ -7,7 +7,7 @@ import { login } from "../utils/apis"
 const Login = () => {
   const { user, setUser } = useContext(appContext)
   const navigate = useNavigate()
-
+  const [loading, setLoading] = useState(false)
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
@@ -16,11 +16,9 @@ const Login = () => {
       alert("Please fill in all fields")
       return
     }
+    setLoading(true)
     login(username, password).then((res) => {
       if (res.success) {
-        console.log(res)
-
-        // save to token to local storage and set user
         localStorage.setItem("token", res.token)
         localStorage.setItem("user", res.user)
         setUser(res.user)
@@ -28,6 +26,7 @@ const Login = () => {
       } else {
         alert(res.message)
       }
+      setLoading(false)
     })
   }
 
@@ -41,7 +40,10 @@ const Login = () => {
     <>
       <div className="login-form-main">
         <div className="form">
-          <div className="top">Account Login</div>
+          <div className="top">
+            <h1>Welcome Back</h1>
+          </div>
+
           <div className="middle">
             <input
               type="text"
@@ -49,6 +51,7 @@ const Login = () => {
               onChange={(e) => setUsername(e.target.value)}
               className="form-input"
               placeholder="Username"
+              disabled={loading}
             />
             <input
               type="password"
@@ -56,13 +59,24 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="form-input"
               placeholder="Password"
+              disabled={loading}
             />
           </div>
+
           <div className="bottom">
-            <input type="submit" className="button submit" onClick={handleLogin} />
+            <button
+              onClick={handleLogin}
+              className={`button submit ${loading ? "loading" : ""}`}
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button>
             <Link to="/signup" className="button change">
               Don't have an account? Register
             </Link>
+            {/* <Link to="/forgot-password" className="forgot-password">
+              Forgot Password?
+            </Link> */}
           </div>
         </div>
       </div>

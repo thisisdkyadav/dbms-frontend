@@ -1,6 +1,11 @@
 import React, { useState } from "react"
 import "../css/NewPost.css"
-import { createPost, uploadMedia } from "../utils/apis" // Assuming this is your API utility
+import { createPost, uploadMedia } from "../utils/apis"
+
+const getMediaType = (file) => {
+  if (!file) return null
+  return file.type.startsWith("video/") ? "video" : "image"
+}
 
 const NewPost = () => {
   const [text, setText] = useState("")
@@ -11,7 +16,13 @@ const NewPost = () => {
   const handleMediaChange = (e) => {
     const file = e.target.files[0]
     setMedia(file)
-    setPreview(URL.createObjectURL(file))
+    if (file) {
+      const mediaType = getMediaType(file)
+      setPreview({
+        url: URL.createObjectURL(file),
+        type: mediaType,
+      })
+    }
   }
 
   const handleSubmit = async () => {
@@ -88,8 +99,13 @@ const NewPost = () => {
 
           {preview && (
             <div className="media-preview">
-              <img src={preview} alt="Preview" />
+              {preview.type === "video" ? (
+                <video src={preview.url} controls className="preview-media" />
+              ) : (
+                <img src={preview.url} alt="Preview" className="preview-media" />
+              )}
               <button
+                className="remove-media"
                 onClick={() => {
                   setMedia(null)
                   setPreview(null)

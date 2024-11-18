@@ -1,6 +1,5 @@
 const baseurl = "http://localhost:8000/api"
 
-// login function
 export const login = async (username, password) => {
   try {
     const response = await fetch(`${baseurl}/user/login`, {
@@ -18,7 +17,6 @@ export const login = async (username, password) => {
   }
 }
 
-// signup function
 export const signup = async (name, username, password, email, phone) => {
   try {
     const response = await fetch(`${baseurl}/user/register`, {
@@ -55,11 +53,9 @@ export const searchUsers = async (usernameInitial) => {
   try {
     const token = localStorage.getItem("token")
     const response = await fetch(`${baseurl}/user/search/${usernameInitial}`, {
-      // method: "POST",/
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      // body: JSON.stringify({ usernameInitial }),
     })
     const data = await response.json()
     return data
@@ -84,7 +80,6 @@ export const toggleFollow = async (username) => {
   }
 }
 
-// get chats
 export const getChats = async () => {
   try {
     const token = localStorage.getItem("token")
@@ -100,7 +95,6 @@ export const getChats = async () => {
   }
 }
 
-// create chat
 export const createChat = async (receiverId) => {
   try {
     console.log(receiverId)
@@ -121,7 +115,6 @@ export const createChat = async (receiverId) => {
   }
 }
 
-// /get messages
 export const getMessages = async (chatId) => {
   try {
     const token = localStorage.getItem("token")
@@ -137,7 +130,6 @@ export const getMessages = async (chatId) => {
   }
 }
 
-// send Message
 export const sendMessage = async (chatId, text, receiverIds) => {
   try {
     const token = localStorage.getItem("token")
@@ -156,7 +148,6 @@ export const sendMessage = async (chatId, text, receiverIds) => {
   }
 }
 
-// get profile image
 export const getProfileImage = async (username) => {
   try {
     const token = localStorage.getItem("token")
@@ -172,7 +163,6 @@ export const getProfileImage = async (username) => {
   }
 }
 
-// upload media
 export const uploadMedia = async (formData) => {
   try {
     const token = localStorage.getItem("token")
@@ -191,7 +181,6 @@ export const uploadMedia = async (formData) => {
   }
 }
 
-// create post
 export const createPost = async (postData) => {
   try {
     const token = localStorage.getItem("token")
@@ -210,7 +199,6 @@ export const createPost = async (postData) => {
   }
 }
 
-// getUserPosts
 export const getUserPosts = async (username) => {
   try {
     const token = localStorage.getItem("token")
@@ -226,7 +214,6 @@ export const getUserPosts = async (username) => {
   }
 }
 
-// like post
 export const likePost = async (postId) => {
   try {
     const token = localStorage.getItem("token")
@@ -242,7 +229,6 @@ export const likePost = async (postId) => {
   }
 }
 
-// getPostById
 export const getPostById = async (postId) => {
   try {
     const token = localStorage.getItem("token")
@@ -258,7 +244,6 @@ export const getPostById = async (postId) => {
   }
 }
 
-// getPostOfFollowedUsers
 export const getPostOfFollowedUsers = async () => {
   try {
     const token = localStorage.getItem("token")
@@ -274,7 +259,6 @@ export const getPostOfFollowedUsers = async () => {
   }
 }
 
-// create comment
 export const createComment = async (postId, text, parentComment) => {
   try {
     const token = localStorage.getItem("token")
@@ -293,7 +277,6 @@ export const createComment = async (postId, text, parentComment) => {
   }
 }
 
-// get comments
 export const getComments = async (postId) => {
   try {
     const token = localStorage.getItem("token")
@@ -310,7 +293,6 @@ export const getComments = async (postId) => {
   }
 }
 
-// deletePost
 export const deletePost = async (postId) => {
   try {
     const token = localStorage.getItem("token")
@@ -327,7 +309,6 @@ export const deletePost = async (postId) => {
   }
 }
 
-// miniprofile
 export const getMiniProfile = async (username) => {
   try {
     const token = localStorage.getItem("token")
@@ -343,7 +324,6 @@ export const getMiniProfile = async (username) => {
   }
 }
 
-// delete message
 export const deleteMessage = async (messageId) => {
   try {
     const token = localStorage.getItem("token")
@@ -360,7 +340,6 @@ export const deleteMessage = async (messageId) => {
   }
 }
 
-// updateProfile
 export const updateProfile = async (changes) => {
   console.log(changes)
 
@@ -373,6 +352,22 @@ export const updateProfile = async (changes) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(changes),
+    })
+    const data = await response.json()
+    return data
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export const deleteProfile = async () => {
+  try {
+    const token = localStorage.getItem("token")
+    const response = await fetch(`${baseurl}/user/delete`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
     const data = await response.json()
     return data

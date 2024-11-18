@@ -58,11 +58,6 @@ function App() {
     })
     setSocket(socketio)
 
-    // socketio.on("newMessage", (message) => {
-    //   // handleNewMessage(message)
-    //   console.log(message, "ssssssss")
-    // })
-
     disconnectSocketio = () => {
       socketio.close()
       setSocket(null)
