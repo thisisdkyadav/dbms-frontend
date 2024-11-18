@@ -82,7 +82,9 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="middle">EchoSpace</div>
+        <Link to={"/"} className="middle">
+          EchoSpace
+        </Link>
         <div className="right">
           <Link to={"/newpost"} className="new-post-btn">
             New Post

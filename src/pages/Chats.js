@@ -59,31 +59,44 @@ const Chats = () => {
   return (
     <div className="chats">
       <div className="chats-list">
-        {chats.map((chat, index) => {
-          const otherUser = chat.user1 === user ? chat.user2 : chat.user1
-          const userData = usersData[otherUser]
+        {chats.length === 0 ? (
+          <div className="empty-state">No chats available</div>
+        ) : (
+          chats.map((chat, index) => {
+            const otherUser = chat.user1 === user ? chat.user2 : chat.user1
+            const userData = usersData[otherUser]
 
-          return (
-            <Link
-              to={`/chats/${chat.id}`}
-              key={index}
-              className={`chat ${chatId == chat.id ? "active" : ""}`}
-            >
-              <img
-                className="chat-avatar"
-                src={getImageUrl(userData?.profile_image) || "profile.jpg"}
-                alt={otherUser}
-              />
-              <div className="chat-info">
-                <div className="chat-name">{userData?.name || otherUser}</div>
-                <div className="chat-username">@{otherUser}</div>
-              </div>
-            </Link>
-          )
-        })}
+            return (
+              <Link
+                to={`/chats/${chat.id}`}
+                key={index}
+                className={`chat ${chatId == chat.id ? "active" : ""}`}
+              >
+                <img
+                  className="chat-avatar"
+                  src={getImageUrl(userData?.profile_image) || "profile.jpg"}
+                  alt={otherUser}
+                />
+                <div className="chat-info">
+                  <div className="chat-name">{userData?.name || otherUser}</div>
+                  <div className="chat-username">@{otherUser}</div>
+                </div>
+              </Link>
+            )
+          })
+        )}
       </div>
 
-      {chatId && <MessagesView chatId={chatId} receiverIds={getReceiverIds()} />}
+      {chatId ? (
+        <MessagesView chatId={chatId} receiverIds={getReceiverIds()} />
+      ) : (
+        <div className="empty-messages-view">
+          <div className="empty-state">
+            <img src="/chat-icon.svg" alt="Select chat" />
+            <p>Select a chat to start messaging</p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

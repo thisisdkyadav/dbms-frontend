@@ -133,7 +133,7 @@
   padding: 0 24px;
   border: none;
   border-radius: 24px;
-  background-color: rgb(74, 90, 255);
+  background-color: #4a5aff;
   color: white;
   font-weight: 500;
   cursor: pointer;
@@ -199,4 +199,37 @@
 
 .message.sent .message-delete:hover {
   background-color: white;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  color: #666;
+  font-size: 15px;
+}
+
+.empty-state img {
+  width: 64px;
+  height: 64px;
+  opacity: 0.5;
+  margin-bottom: 16px;
+}
+
+.empty-messages-view {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(74, 90, 255, 0.05);
+}
+
+.empty-messages-view .empty-state {
+  background-color: white;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }

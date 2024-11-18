@@ -95,6 +95,17 @@
   background-color: rgba(74, 90, 255, 0.15);
 }
 
+.form-input.error {
+  border-color: #ff4444;
+}
+
+.error-message {
+  color: #ff4444;
+  font-size: 12px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
 @keyframes slideUp {
   from {
     opacity: 0;
